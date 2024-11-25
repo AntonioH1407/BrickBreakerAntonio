@@ -2,7 +2,7 @@ import pygame
 from scripts.raquete import Raquete
 from scripts.bola import Bola
 from scripts.tijolo import Tijolo
-from scripts.interface import Texto
+from scripts.interface import *
 
 class Partida:
     def __init__(self, tela):
@@ -21,11 +21,9 @@ class Partida:
         self.raquete.atualizar()
         self.bola.atualizar()
 
-        # Colisão da bola com a raquete
         if self.bola.getRect().colliderect(self.raquete.getRect()):
             self.bola.inverter_direcao()
 
-        # Colisão da bola com os tijolos
         for tijolo in self.tijolos:
             if self.bola.getRect().colliderect(tijolo.getRect()):
                 self.tijolos.remove(tijolo)
@@ -33,12 +31,10 @@ class Partida:
                 self.pontos += 10
                 self.pontos_texto.atualizarTexto(str(self.pontos))
 
-        # Verificar se a bola caiu
         if self.bola.posicao[1] > self.tela.get_height():
             self.estado = "menu"
             self.resetar()
 
-        # Desenhar elementos
         self.raquete.desenhar()
         self.bola.desenhar()
         for tijolo in self.tijolos:
@@ -50,14 +46,21 @@ class Partida:
     def resetar(self):
         self.__init__(self.tela)
 
+
 class Menu:
     def __init__(self, tela):
         self.tela = tela
-        self.titulo = Texto(tela, "Brick Breaker", 300, 200, (255, 255, 255), 50)
-        
+        self.titulo = Texto(tela, "Brick Breaker", 300,20,(255,255,255), 50)
+        self.estado = "menu"
 
+        self.botao_jogar = Botao(tela, "jogar", 360, 300, 50,(200, 0, 0), (255,255,255))
+    
     def atualizar(self):
+        self.estado = "menu"
         self.titulo.desenhar()
-        if pygame.key.get_pressed()[pygame.K_SPACE]:
-            return "partida"
-        return "menu"
+        self.botao_jogar.desenhar()
+
+        if self.botao_jogar.get_click():
+            self.estado = "partida"
+
+        return self.estado

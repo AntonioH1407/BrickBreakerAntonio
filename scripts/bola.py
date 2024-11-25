@@ -11,7 +11,6 @@ class Bola:
         self.posicao[0] += self.velocidade[0]
         self.posicao[1] += self.velocidade[1]
 
-        # Colisões com as bordas da tela
         if self.posicao[0] <= 0 or self.posicao[0] >= self.tela.get_width():
             self.velocidade[0] = -self.velocidade[0]
         if self.posicao[1] <= 0:
